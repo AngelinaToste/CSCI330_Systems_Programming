@@ -1,10 +1,8 @@
 // Angelina Toste
 /*
  * Homework 2
- * Purpose:
+ * Purpose: using a menu, sort a struct array from high to low or low to high based on the int values and float values in the struct array.
  *
- *Notes:
- *- 9/15 made the array of structs called carData car[] and need to next sort the array using the int values and float values with the bubble sort
  *-
  */
 
@@ -18,21 +16,52 @@ struct carData
 	char name[50], color[50];
 	float model;
 	int cost;
-};
+} temp;
 
-struct temp
-{
-	char name[50], color[50];
-	float model;
-	int cost;
-};
+void floatSort(struct carData *car, int size, int isLowToHigh)
+{ // bubble sort to arrange array float values
+	// the third parameter determines sort type: high to low(0) OR low to high(1)
 
-//struct temp;
 
-void intLowToHighSort(struct carData *car, int size)
-{ // bubble sort to arrange array values in order of low to high
+    struct carData temp;
+    for (int x  = 0; x < size - 1; ++x)
+    {
+    	for (int i = 0; i < size - x - 1; ++i)
+    	{
+    		if (car[i].model > car[i + 1].model)
+    		{
 
-    struct carData *temp;
+    			temp = car[i];
+    			car[i]= car[i + 1];
+    			car[i + 1]= temp;
+
+    		}
+    	}
+    }
+    if (isLowToHigh == 1)
+    { // sorts from low to high
+        for (int i = 0; i < size; i++)
+        {
+        	printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
+        }
+        printf("\n");
+    }
+    else if (isLowToHigh == 0)
+    { // sorts from high to low
+    	for (int i = size - 1; i >= 0 ; i--)
+    	{
+    	    printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
+    	}
+    	printf("\n");
+    }
+
+}
+
+
+void intSort(struct carData *car, int size, int isLowToHigh)
+{ // bubble sort to arrange array int values
+	// the third parameter determines sort type: high to low(0) OR low to high(1)
+    struct carData temp;
     for (int x  = 0; x < size - 1; ++x)
     {
     	for (int i = 0; i < size - x - 1; ++i)
@@ -40,69 +69,67 @@ void intLowToHighSort(struct carData *car, int size)
     		if (car[i].cost > car[i + 1].cost)
     		{
 
-    			*temp = car[i];
+    			temp = car[i];
     			car[i]= car[i + 1];
-    			car[i + 1]= *temp;
+    			car[i + 1]= temp;
 
-    			printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
     		}
     	}
     }
-    printf("%d\n", size);
-    for (int i = 0; i < 4; ++i)
+
+    if (isLowToHigh == 1)
+    { // sorts from low to high
+        for (int i = 0; i < size; i++)
         {
-        	//printf("%d\n", size);
-        	printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
+            printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
         }
         printf("\n");
-
-}
-/*
-void printArray (struct carData *car, int size)
-{
-
-    for (int i = 0; i < size; ++i)
-    {
-    	printf("%i\n", size);
-    	//printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
-    }
-    printf("\n");
+     }
+     else if (isLowToHigh == 0)
+     { // sorts from high to low
+         for (int i = size - 1; i >= 0 ; i--)
+         {
+        	    printf("%s %f %d %s \n", car[i].name, car[i].model, car[i].cost, car[i].color);
+         }
+         printf("\n");
+      }
 }
 
-*/
+int fillStructArray(struct carData *car)
+{ //opens the file, updates the struct array with the file data, returns the number of lines in the file or the size of the array
+	    FILE* data;
+		data  = fopen("hw2.data", "r");
+
+		//numCars is the size of the array (according to number of lines in the file)
+		// index is the counter to iterate through all of the indices of the array
+		int numCars = 0, index = 0;
+
+		//checks if file is found
+		if (NULL == data)
+		{
+			printf("File can't be found. \n");
+		}
+
+		//reads and updates the struct array until an EOF has been found
+		while (fscanf(data, "%s %f %i %s\n", car[index].name, &car[index].model, &car[index].cost, car[index].color ) != EOF)
+		{
+			numCars++;
+			index++;
+		}
+
+		fclose(data);
+
+		return numCars;
+}
 
 
 int main()
 {
-	FILE* data;
-	data  = fopen("hw2.data", "r");
-
-	if (NULL == data)
-	{
-		printf("File can't be found. \n");
-	}
-
-	int numCars = 0; // numCars is the size of the array (according to number of lines in the file)
-	struct carData car[numCars + 1];
-
-	// this will continue to read the file and print until the EOF is reached
-    int index = numCars;
-
-	while (fscanf(data, "%s %f %i %s\n", car[index].name, &car[index].model, &car[index].cost, car[index].color ) != EOF)
-	{
-		printf("%s %f %i %s\n", car[index].name, car[index].model, car[index].cost, car[index].color );
-		numCars++;
-	}
-
-
-	printf("%d", numCars);
-
-	fclose(data);
-
-
+	// initializing variables
+	struct carData car[100];
+    int numCars = fillStructArray(car), choice;
 
 	// this operates the menu
-	int choice;
 
 	    while (choice != 5)
 	    {
@@ -119,24 +146,22 @@ int main()
 
 	    	if (choice == 1)
 	    	{
-                printf("%s", "no");
+                floatSort(car, numCars, 0);
+                printf("\n");
 	    	}
 	    	else if (choice == 2)
 	    	{
-	    		printf("%s", "no");
+	    		floatSort(car, numCars, 1);
+	    		printf("\n");
 	    	}
 	    	else if (choice == 3)
 	    	{
-	    		printf("%s", "no");
+	    		intSort(car, numCars, 0);
+	    		printf("\n");
 	    	}
 	    	else if (choice == 4)
 	    	{
-	    		printf("%s\n", "choice 4");
-	    		//const int numCarsSize = numCars;
-	    		intLowToHighSort(car, numCars);
-	    		//printf("%s\n", car[0].name);
-	    		//printf("%d", numCars);
-	    		//printArray(car, numCars);
+	    		intSort(car, numCars, 1);
 	    		printf("\n");
 
 	    	}
