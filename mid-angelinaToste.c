@@ -1,4 +1,4 @@
-//Angelina Toste
+//Angelina Toste ~revised as of 11/09/2023, changes: new scan function
 
 /* Modification made to homework 4 to allow for two names specified, first and last name
  * to account for this, modifications have been made to each of the functions from hw4.
@@ -20,9 +20,44 @@ struct _data {
 	long number;
 } junk;
 
-
-
 int SCAN(FILE *(*stream))
+{// open file/ stream, return integer indicating how many lines are in the file
+
+	// open file for reading
+	*stream = fopen("midterm.data", "r");
+
+	// initializing counter for the number of lines in the file
+	int numOfContacts = 0;
+
+	if (*stream == NULL)
+	{
+		printf("error: file not found");
+	}
+	else
+	{
+		char* line = NULL;
+		size_t size = 0;
+		size_t nread;
+
+        while ( (nread = getline(&line, &size, *stream)) != -1) // count the number of lines in the file
+        {
+
+        	numOfContacts++;
+        }
+        free(line);
+
+	}
+
+	//close the file
+	fclose(*stream);
+
+	//returns an integer indicating how many lines are in the file
+	return numOfContacts;
+}
+
+// the following scan is incorrect because of how junk first and last names are malloced
+// the sizeof operator only gets the size of a type
+/*int SCAN(FILE *(*stream))
 {// open file/ stream, return integer indicating how many lines are in the file
 
 	// open file for reading
@@ -55,7 +90,7 @@ int SCAN(FILE *(*stream))
 	//returns an integer indicating how many lines are in the file
 	return numOfContacts;
 }
-
+*/
 
 struct _data *LOAD(FILE *stream, int size)
 { //rewind file, create dynamic array (of size), read data, populate struct dynamic array
