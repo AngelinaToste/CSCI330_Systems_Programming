@@ -41,6 +41,7 @@ LINK *NODE_INSERT(char name[42], LINK *head)
 		    	strcpy(current->graph->name, name);
 		    	current->graph->arcCnt = 0;
 
+
 		    	printf("name inserted: %s\n", name);
 
 	}
@@ -62,7 +63,7 @@ LINK *NODE_INSERT(char name[42], LINK *head)
 		newNode->next = NULL;
 
 		//get the last node
-		while (current!= NULL)
+		while (current->next != NULL)
 		{
 			current = current->next;
 		}
@@ -77,7 +78,7 @@ LINK *NODE_INSERT(char name[42], LINK *head)
 		current->next->graph->arcCnt = 0;
 		printf("name inserted: %s\n", name);
 
-
+		//printf("name inserted: %s\n", name);
 	}
 
 	current = current -> next;
@@ -118,12 +119,32 @@ LINK *NODE_ADD_INFO(char start[42], char end[42], int weight,  LINK *head)
         		if ((current->graph->weights[i] == 0) && (current->graph->arcs[i]->name == NULL))
         		{
         			current->graph->weights[i] = weight;
-        			//current = current -> next;
 
-        			strcpy(current->graph->arcs[i]->name, end);
+        			// need to point arc[i] to the next graph node arcNode->graph
+        			// arcNode is a linked list node with the same name as "end"
+        			LINK *arcNode;
+        			arcNode = head;
+        			while (arcNode != NULL)
+        			{
+        			        if (strcmp(arcNode -> name, end)==0)
+        			        {
+                                arcNode->graph->arcCnt++;
+
+                                //set the arcs[i] to be the graph of the end location
+                                current->graph->arcs[i] = arcNode->graph;
+
+                                printf("info added: %s %s %d\n", start, end, weight);
+                                return head;
+
+        			        }
+        			        arcNode = arcNode -> next;
+        			}
+
+        			//current->graph->arcs[i]->name = malloc(strlen(name));
+        			//strcpy(current->graph->arcs[i]->name, end);
         			//infoAdded = 1;
         			//break;
-        			return head;
+
         		}
         		else
         		{
