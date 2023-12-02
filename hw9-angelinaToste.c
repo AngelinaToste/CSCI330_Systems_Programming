@@ -35,12 +35,19 @@ LINK *NODE_INSERT(char name[42], LINK *head)
 		    	strcpy(current-> name, name);
 		    	current-> next = head;
 		    	head = current;
+
+		    	// create a corresponding graph for the link list node
+		    	current->graph = (GRAPH *)(malloc(sizeof(GRAPH)));
+		    	strcpy(current->graph->name, name);
+		    	current->graph->arcCnt = 0;
+
 		    	printf("name inserted: %s\n", name);
 
 	}
 	else
 	{
         // if the entry belongs at the end of the list
+
 
 		//create the new node
 		newNode = (LINK *)(malloc(sizeof(LINK)));
@@ -54,19 +61,25 @@ LINK *NODE_INSERT(char name[42], LINK *head)
 		// point newNode-> next to NULL
 		newNode->next = NULL;
 
-		/*//get the last node
-		while (current->next != NULL)
+		//get the last node
+		while (current!= NULL)
 		{
 			current = current->next;
-		}*/
+		}
 
 		//newNode->next = current-> next->next;
 
-		current->next = newNode;
+		current->next = newNode;  //<-------segfault occurred here
+
+		// create a corresponding graph for the link list node
+		current->next->graph = (GRAPH *)(malloc(sizeof(GRAPH)));
+		strcpy(current->next->graph->name, name);
+		current->next->graph->arcCnt = 0;
 		printf("name inserted: %s\n", name);
 
 
 	}
+
 	current = current -> next;
 	return head;
 }
@@ -91,9 +104,6 @@ LINK *NODE_ADD_INFO(char start[42], char end[42], int weight,  LINK *head)
         	//printf("%d", current->graph->arcCnt);
         	//current->graph->arcCnt = 1;
 
-        	current->graph = (GRAPH *)(malloc(sizeof(GRAPH)));
-        	//increment the arc count
-        	//int one = 1;
 
             (current->graph->arcCnt)++;
 
@@ -109,11 +119,11 @@ LINK *NODE_ADD_INFO(char start[42], char end[42], int weight,  LINK *head)
         		{
         			current->graph->weights[i] = weight;
         			//current = current -> next;
-        			return head;
-        			//strcpy(current->graph->arcs[i]->name, end);
+
+        			strcpy(current->graph->arcs[i]->name, end);
         			//infoAdded = 1;
         			//break;
-
+        			return head;
         		}
         		else
         		{
@@ -156,7 +166,7 @@ int main (int argv, char **argc)
     if (dataFile == NULL)
     {
         printf("error: file not found\n");
-        fclose(dataFile);
+        //fclose(dataFile);
         return 0;
     }
 
