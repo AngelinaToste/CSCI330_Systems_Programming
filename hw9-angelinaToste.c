@@ -116,9 +116,10 @@ LINK *NODE_ADD_INFO(char start[100], char end[100], int weight,  LINK *head)
         			arcNode = head;
         			while (arcNode != NULL)
         			{
+
         			        if (strcmp(arcNode -> name, end)==0)
         			        {
-                                arcNode->graph->arcCnt++;
+                                /*arcNode->graph->arcCnt++;
                                 //printf("new arc count: %s %d\n", arcNode->graph->name, arcNode->graph->arcCnt);
 
                                 int x = 0;
@@ -134,6 +135,8 @@ LINK *NODE_ADD_INFO(char start[100], char end[100], int weight,  LINK *head)
                                     	x++;
                                     }
                                 }
+                                */
+
 
                                 //set the arcs[i] to be the graph of the end location
                                 current->graph->arcs[i] = arcNode->graph;
