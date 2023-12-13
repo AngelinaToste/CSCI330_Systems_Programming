@@ -387,10 +387,23 @@ LINK *LIST_INSERT(char name[], LINK *head)
 void LIST_DELETE(char name[], LINK *(*head))
 { // delete routine, name is the name that is being deleted from the list
 
-	 LINK *current, *obsoleteNode;
+	    LINK *current, *obsoleteNode;
 	    current = *head;
 
-	    while (current != NULL)
+	    if (strcmp(current->name, name) == 0)
+	    {
+            obsoleteNode = current;
+	        (*head) = (*head) -> next;
+
+	        free(obsoleteNode->name);
+	        obsoleteNode->name = NULL;
+	        free(obsoleteNode);
+	        obsoleteNode = NULL;
+	        //printf("Name deleted: %s\n", name);
+            return;
+	    }
+
+	    while (current->next != NULL)
 	    {
 	    	// search to see if upcoming name is the name that needs to be deleted
 	        if (strcmp(current -> next -> name, name) == 0)
@@ -549,10 +562,10 @@ int main(int argv,char **argc)
     	        	    	    }
 
     	        	    	  }
-    	        	    	  else
-    	        	    	  { //handles case where a and d are not provided or there is a different letter
-    	        	    	      printf("Unknown Operation");
-    	        	    	  }
+    	        	    	  //else
+    	        	    	  //{ //handles case where a and d are not provided or there is a different letter
+    	        	    	      //printf("Unknown Operation %s\n", op);
+    	        	    	 // }
 
     	        	    	// get next line
     	        	    	lineSize = getline(&lineBuf, &lineBufSize, stream);
