@@ -1,6 +1,7 @@
 //Angelina Toste
 
-// CSCI 330 Final: based on hw 5 with addition of last name and abilities to sort based on first and last name
+// CSCI 330 Final: based on hw 5 with addition of last name
+// this program will display names sorted based on first name
 
 
 #include <stdio.h>
